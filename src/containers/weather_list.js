@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Sparklines, SparklinesLine } from 'react-sparklines';
 
 
 class WeatherList extends Component{
 
-    displayWheater(){
-        return this.props.weather.map(record=>{
-            return(
-                <tr key="">
-                    <td>{record.city.name}</td>
-                    <td>{record.list[0].main.temp}</td>
-                    <td>{record.list[0].main.pressure}</td>
-                    <td>{record.list[0].main.humidity}</td>
-                </tr>
-            )
-        })
+    renderWeather(cityData){
+
+        const name = cityData.city.name;
+        const temps = cityData.list.map(rec=> rec.main.temp);
+        
+
+        return(
+            <tr key={name}>
+                <td>{name}</td>
+                <td>
+                    <Sparklines data={temps} height={120} width={180}>
+                        <SparklinesLine color="red"/>
+                    </Sparklines>
+                </td>
+            </tr>
+        )
     }
 
     render(){  
@@ -31,7 +37,7 @@ class WeatherList extends Component{
                     </tr>
                 </thead>
                 <tbody>
-                    {this.displayWheater()}
+                    {this.props.weather.map(this.renderWeather)}
                 </tbody>
             </table>
         )
